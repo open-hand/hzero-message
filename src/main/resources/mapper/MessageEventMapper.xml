@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.hzero.message.infra.mapper.MessageEventMapper">
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap id="BaseResultMap" type="org.hzero.message.domain.entity.MessageEvent">
+        <result column="message_event_id" property="messageEventId" jdbcType="DECIMAL"/>
+        <result column="event_id" property="eventId" jdbcType="DECIMAL"/>
+        <result column="event_code" property="eventCode" jdbcType="VARCHAR"/>
+        <result column="receiver_type_code" property="receiverTypeCode" jdbcType="VARCHAR"/>
+        <result column="temp_server_id" property="tempServerId" jdbcType="VARCHAR"/>
+        <result column="enabled_flag" property="enabledFlag" jdbcType="DECIMAL"/>
+        <result column="object_version_number" property="objectVersionNumber" jdbcType="DECIMAL"/>
+        <result column="creation_date" property="creationDate" jdbcType="DATE"/>
+        <result column="created_by" property="createdBy" jdbcType="DECIMAL"/>
+        <result column="last_updated_by" property="lastUpdatedBy" jdbcType="DECIMAL"/>
+        <result column="last_update_date" property="lastUpdateDate" jdbcType="DATE"/>
+    </resultMap>
+    <select id="selectMessageEvents" parameterType="org.hzero.message.api.dto.MessageEventDTO" resultType="org.hzero.message.api.dto.MessageEventDTO">
+        SELECT
+            hme.message_event_id,
+            hme.event_id,
+            hme.event_code,
+            hme.receiver_type_code,
+            hts.message_code,
+            hme.enabled_flag,
+            hrt.type_name receiverTypeName,
+            hts.message_name,
+            hrt.receiver_type_id,
+            hme.temp_server_id,
+            hme.object_version_number
+        FROM
+            hmsg_message_event hme
+        JOIN hmsg_template_server hts ON hme.temp_server_id = hts.temp_server_id
+        JOIN hmsg_receiver_type hrt ON hme.receiver_type_code = hrt.type_code
+        WHERE
+            hme.event_code = #{eventCode}
+            <if test="tenantId != null">
+                AND hrt.tenant_id = #{tenantId}
+                AND hts.tenant_id = #{tenantId}
+            </if>
+            <if test="tempServerId != null">
+                AND hts.temp_server_id = #{tempServerId}
+            </if>
+            <if test="receiverTypeId != null">
+                AND hrt.receiver_type_id = #{receiverTypeId}
+            </if>
+    </select>
+</mapper>
