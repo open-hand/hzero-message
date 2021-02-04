@@ -9,7 +9,7 @@
         <version>1.4.0.RELEASE</version>
     </parent>
     <artifactId>hzero-message-saas</artifactId>
-    <version>1.4.3.RELEASE</version>
+    <version>1.4.4.RELEASE</version>
 
     <dependencies>
         <!-- HZero Starter & Boot -->
