@@ -47,7 +47,7 @@
        			when hnr.receiver_type_code = 'USER_GROUP' then hug.group_name
 			 	when hnr.receiver_type_code = 'USER' then iu.real_name
 			 	when hnr.receiver_type_code = 'TENANT' then ht.tenant_name
-			 	when hnrtmp.receiver_type_code = 'ROLE' then ir.name
+			 	when hnr.receiver_type_code = 'ROLE' then ir.name
       		end  receiver_source_name 
 		FROM
 			hmsg_notice_receiver hnr
@@ -55,7 +55,7 @@
 			LEFT JOIN hpfm_unit hu ON hnr.receiver_type_code = 'UNIT' and hnr.receiver_source_id = hu.unit_id
 			LEFT JOIN iam_user iu ON hnr.receiver_type_code = 'USER' and hnr.receiver_source_id = iu.id
 			LEFT JOIN hpfm_tenant ht ON hnr.receiver_type_code = 'TENANT' and hnr.receiver_source_id = ht.tenant_id
-			LEFT JOIN iam_role ir ON hnrtmp.receiver_type_code = 'ROLE' and hnrtmp.receiver_source_id = ir.id
+			LEFT JOIN iam_role ir ON hnr.receiver_type_code = 'ROLE' and hnr.receiver_source_id = ir.id
         WHERE hnr.published_id = #{publishedId}
     </select>
 </mapper>
